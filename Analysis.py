@@ -36,6 +36,7 @@ class Ui_Analysis(object):
     def close(self):
         self.Answers_book.close()
     def retranslateUi(self, Analysis):
+        self.Analysis_2.setWordWrap(True)
         _translate = QtCore.QCoreApplication.translate
         ran = self.Answers_sheet[f'A{self.ran}']
         judge = self.file['analysis']['judge']

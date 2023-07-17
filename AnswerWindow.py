@@ -159,6 +159,7 @@ class Ui_AnswerWindow(object):
             self.label.setText(AQA_list[1].value)
 
     def retranslateUi(self, AnswerWindow):
+        self.label.setWordWrap(True)
         _translate = QtCore.QCoreApplication.translate
         i = []
         AQA_list = []

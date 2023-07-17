@@ -11,11 +11,25 @@
 from PyQt5 import QtCore, QtWidgets
 import configparser as cfp
 import datetime, os, UI
+from openpyxl import load_workbook
 
 class Ui_End(object):
     def setupUi(self, End):
         self.file = cfp.ConfigParser()
         self.file.read('save.ini')  # 读取配置文件
+        self.Answers_book = load_workbook(self.file['setting']['choose3'])  #创建xw对象
+        self.Answers_sheet = self.Answers_book['Sheet1']  #获取sheet页
+        if self.file['end_analysis']['e_question'] == '':
+            self.a_list = self.file['end_analysis']['t_question'].split(',')
+            self.c_list = self.file['end_analysis']['t_choose'].split('<~!~>')
+        elif self.file['end_analysis']['t_question'] == '':
+            self.a_list = self.file['end_analysis']['e_question'].split(',')
+            self.c_list = self.file['end_analysis']['e_choose'].split('<~!~>')
+        else:
+            self.a_list = self.file['end_analysis']['e_question'].split(',') \
+                          + self.file['end_analysis']['t_question'].split(',')
+            self.c_list = self.file['end_analysis']['e_choose'].split('<~!~>') \
+                          + self.file['end_analysis']['t_choose'].split('<~!~>')
         End.setObjectName("End")
         End.resize(400, 300)
         self.verticalLayoutWidget = QtWidgets.QWidget(End)
@@ -104,18 +118,28 @@ class Ui_End(object):
               f"正确率：{self.rightlv}%")
         t = datetime.datetime.now()
         name = f'{t.year}年{t.month}月{t.day}日{t.hour}时{t.minute}分'
-        if name in os.listdir():
-            mode = 'w'
-        else:
-            mode = 'a'
-        file = open(f'{name}.txt',mode)
+        file = open(f'{name}.txt','a')
         file.write(f"选择题库：{self.file['setting']['choose3']}\n"
               f"完成时间：\
 {datetime.datetime.now() - datetime.datetime.strptime(self.file['setting']['start_time'], '%Y-%m-%d %H:%M:%S.%f')}\n"
               f"正确题目数量：{self.file['answers']['right']}\n"
               f"错误题目数量：{self.file['answers']['bad']}\n"
               f"总题目数量：{self.file['setting']['num']}\n"
-              f"正确率：{self.rightlv}%")
+              f"正确率：{self.rightlv}%\n\n")
+        e = 0
+        for i in self.a_list:
+            a = self.Answers_sheet[f'C{self.a_list[e]}:F{self.a_list[e]}']
+            b = a[0]
+            c = 0
+            d = []
+            print(len(b))
+            for i in b:
+                d.append(b[c].value)
+                c += 1
+            file.write(f"题目：{self.Answers_sheet[f'B{self.a_list[e]}'].value}\n"\
+                       f"正确选项：{d[0]}\n错误选项：{d[1], d[2], d[3]}\n你的选择：{self.c_list[e]}\n"\
+                       f"解析：{self.Answers_sheet[f'A{self.a_list[e]}'].value}\n\n")
+            e += 1
     def retranslateUi(self, End):
         _translate = QtCore.QCoreApplication.translate
         End.setWindowTitle(_translate("End", "结算"))
