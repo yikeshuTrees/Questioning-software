@@ -137,7 +137,7 @@ class Ui_AnswerWindow(object):
                     self.ran = random.randint(2, rows.row - 1)
                 self.ran_list.append(self.ran)
             else:
-                self.ran = random.randint(2, rows.row)
+                self.ran = random.randint(2, rows.row - 1)
             for b in self.Answers_sheet[f'A{self.ran}:F{self.ran}']:
                 AQA_list = b
             self.t_answer = AQA_list[2].value
