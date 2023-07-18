@@ -143,7 +143,9 @@ class Ui_End(object):
     def retranslateUi(self, End):
         _translate = QtCore.QCoreApplication.translate
         End.setWindowTitle(_translate("End", "结算"))
-        self.Questions.setText(_translate("End", f"选择题库：{self.file['setting']['choose3']}"))
+        self.Questions.setWordWrap(True)
+        self.Questions.setText(_translate("End", f"选择题库：{self.file['setting']['choose3']}"
+                                                 f"(分类:{self.file['setting']['c_sheet']})"))
         self.Time.setText(_translate("End", f"完成时间：\
 {datetime.datetime.now() - datetime.datetime.strptime(self.file['setting']['start_time'], '%Y-%m-%d %H:%M:%S.%f')}"))
         self.Tnumber.setText(_translate("End", f"正确题目数量：{self.file['answers']['right']}"))
