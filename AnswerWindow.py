@@ -22,7 +22,7 @@ class Ui_AnswerWindow(object):
             'bad':'0'
         }
         self.Answers_book = load_workbook(self.file['setting']['choose3'])  #创建xw对象
-        self.Answers_sheet = self.Answers_book['Sheet1']  #获取sheet页
+        self.Answers_sheet = self.Answers_book[self.file['setting']['c_sheet']]  #获取sheet页
         self.i = 0  #初始化变量
         self.right = 0  #初始化变量
         self.bad = 0  #初始化变量

@@ -18,7 +18,7 @@ class Ui_End(object):
         self.file = cfp.ConfigParser()
         self.file.read('save.ini')  # 读取配置文件
         self.Answers_book = load_workbook(self.file['setting']['choose3'])  #创建xw对象
-        self.Answers_sheet = self.Answers_book['Sheet1']  #获取sheet页
+        self.Answers_sheet = self.Answers_book[self.file['setting']['c_sheet']]  #获取sheet页
         if self.file['end_analysis']['e_question'] == '':
             self.a_list = self.file['end_analysis']['t_question'].split(',')
             self.c_list = self.file['end_analysis']['t_choose'].split('<~!~>')

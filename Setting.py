@@ -51,6 +51,8 @@ class Ui_Setting(object):
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.comboBox = QtWidgets.QComboBox(self.verticalLayoutWidget)
         self.comboBox.setObjectName("comboBox")
+        self.comboBox_2 = QtWidgets.QComboBox(self.verticalLayoutWidget)
+        self.comboBox_2.setObjectName("comboBox_2")
         files = os.listdir('.\\')
         xlfile = []
         for i in files:
@@ -59,6 +61,7 @@ class Ui_Setting(object):
         for i in xlfile:
             self.comboBox.addItem("")
         self.verticalLayout_2.addWidget(self.comboBox)
+        self.verticalLayout_2.addWidget(self.comboBox_2)
         self.radioButton_1 = QtWidgets.QRadioButton(self.verticalLayoutWidget)
         self.radioButton_1.setObjectName("radioButton_1")
         self.verticalLayout_2.addWidget(self.radioButton_1)
@@ -70,19 +73,24 @@ class Ui_Setting(object):
         self.retranslateUi(Setting)
         QtCore.QMetaObject.connectSlotsByName(Setting)
 
-        # 当点击“开始”按钮时，调用get_setting_1方法
+        self.comboBox.highlighted['int'].connect(self.sheet)
+        self.comboBox_2.highlighted['QString'].connect(self.c_sheet)
         self.StartButton.clicked.connect(self.get_setting_1)
-        # 当点击“开始”按钮时，调用get_setting_2方法
         self.StartButton.clicked.connect(self.get_setting_2)
-        # 当点击“开始”按钮时，调用get_setting_3方法
         self.StartButton.clicked.connect(self.get_setting_3)
-        # 当点击“开始”按钮时，关闭设置窗口
         self.StartButton.clicked.connect(self.check_condition)
-
-    def get_setting_1(self):
+    def sheet(self):
         self.file['setting']['choose3'] = self.comboBox.currentText()
-        self.Answers_book = load_workbook(self.file['setting']['choose3'])  #创建xw对象
-        self.Answers_sheet = self.Answers_book['Sheet1']  #获取sheet页
+        self.Answers_book = load_workbook(self.file['setting']['choose3'])
+        s_names = self.Answers_book.sheetnames
+        self.comboBox_2.clear()
+        for i in s_names:
+            self.comboBox_2.addItem(i)
+        self.file['setting']['c_sheet'] = self.comboBox_2.currentText()
+    def c_sheet(self,text):
+        self.file['setting']['c_sheet'] = text
+    def get_setting_1(self):
+        self.Answers_sheet = self.Answers_book[self.file['setting']['c_sheet']]
         for self.rows in self.Answers_sheet['A']:
             if self.rows.value == None:
                 break

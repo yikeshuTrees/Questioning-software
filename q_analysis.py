@@ -17,7 +17,7 @@ class Ui_q_analysis(object):
         self.file = cfp.ConfigParser()
         self.file.read('save.ini')
         self.Answers_book = load_workbook(self.file['setting']['choose3'])  #创建xw对象
-        self.Answers_sheet = self.Answers_book['Sheet1']  #获取sheet页
+        self.Answers_sheet = self.Answers_book[self.file['setting']['c_sheet']]  #获取sheet页
         if self.file['End_analysis']['choose'] == '错题解析':
             self.a_list = self.file['end_analysis']['e_question'].split(',')
             self.c_list = self.file['end_analysis']['e_choose'].split('<~!~>')

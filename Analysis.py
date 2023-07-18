@@ -16,7 +16,7 @@ class Ui_Analysis(object):
         self.file.read('save.ini')
         self.ran = self.file.get('analysis','analysis')
         self.Answers_book = load_workbook(self.file['setting']['choose3'])  #创建xw对象
-        self.Answers_sheet = self.Answers_book['Sheet1']  #获取sheet页
+        self.Answers_sheet = self.Answers_book[self.file['setting']['c_sheet']]  #获取sheet页
         Analysis.setObjectName("Analysis")
         Analysis.resize(400, 300)
         self.Analysis_2 = QtWidgets.QLabel(Analysis)
