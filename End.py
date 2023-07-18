@@ -110,7 +110,8 @@ class Ui_End(object):
             self.file.write(configfile)
         UI.q_analysisW()
     def save(self):
-        print(f"选择题库：选择题库：{self.file['setting']['choose3']}\n"
+        print(f"选择题库：选择题库：{self.file['setting']['choose3']}
+              f"(分类:{self.file['setting']['c_sheet']})\n"
               f"完成时间：\n"
               f"正确题目数量：{self.file['answers']['right']}\n"
               f"错误题目数量：{self.file['answers']['bad']}\n"
@@ -120,6 +121,7 @@ class Ui_End(object):
         name = f'{t.year}年{t.month}月{t.day}日{t.hour}时{t.minute}分'
         file = open(f'{name}.txt','a')
         file.write(f"选择题库：{self.file['setting']['choose3']}\n"
+                   f"(分类:{self.file['setting']['c_sheet']})\n"
               f"完成时间：\
 {datetime.datetime.now() - datetime.datetime.strptime(self.file['setting']['start_time'], '%Y-%m-%d %H:%M:%S.%f')}\n"
               f"正确题目数量：{self.file['answers']['right']}\n"
