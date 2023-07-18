@@ -68,13 +68,8 @@ class Ui_AnswerWindow(object):
         self.retranslateUi(AnswerWindow)  #调用翻译方法
         QtCore.QMetaObject.connectSlotsByName(AnswerWindow)  #连接槽函数和槽
 
-        # 当点击“下一步”按钮时，调用get_choose_1方法
         self.NextButton.clicked.connect(self.get_choose_1)
-        # 当点击“下一步”按钮时，调用check_condition方法
-        self.NextButton.clicked.connect(self.check_condition)
-
     def get_choose_1(self):
-        # 获取所选答案并进行判断
         if self.radioButtonA.isChecked():
             answer = self.radioButtonA.text()
             print(f'checkA:{answer}')
@@ -90,7 +85,7 @@ class Ui_AnswerWindow(object):
         else:
             answer = 'error'
         if answer == 'error':
-            print('You are error.')
+            UI.e_textW('请选择答案！！！')
         elif answer == self.t_answer:
             self.right += 1
             self.file['analysis']['analysis'] = str(self.ran)
@@ -99,6 +94,12 @@ class Ui_AnswerWindow(object):
             self.t_question.append(self.ran)
             self.t_choose.append(answer)
             print(self.t_question,self.t_choose)
+            with open('save.ini', 'w') as configfile:
+                self.file.write(configfile)
+            if self.file['setting']['choose1'] == '做题过程有解析（做一题出一题的解析）':
+                UI.AnalysisW()
+            self.i += 1
+            self.check_condition()
         else:
             self.bad += 1
             self.file['analysis']['analysis'] = str(self.ran)
@@ -107,13 +108,14 @@ class Ui_AnswerWindow(object):
             self.e_question.append(self.ran)
             self.e_choose.append(answer)
             print(self.e_question,self.e_choose)
-        with open('save.ini', 'w') as configfile:
-            self.file.write(configfile)
-        self.i += 1
-        if (self.file['setting']['choose1'] == '做题过程有解析（做一题出一题的解析）')\
-                or (self.file['setting']['choose1'] == '正确的题无需解析（错误的题有解析）'\
-                and self.file['analysis']['judge'] == '答错了\n'):
-            UI.AnalysisW()
+            with open('save.ini', 'w') as configfile:
+                self.file.write(configfile)
+            if (self.file['setting']['choose1'] == '做题过程有解析（做一题出一题的解析）') \
+                    or (self.file['setting']['choose1'] == '正确的题无需解析（错误的题有解析）' \
+                        and self.file['analysis']['judge'] == '答错了\n'):
+                UI.AnalysisW()
+            self.i += 1
+            self.check_condition()
     def check_condition(self):
         if self.i == int(self.file.get('setting', 'num')):
             self.file['end_analysis'] = {

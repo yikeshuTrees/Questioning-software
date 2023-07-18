@@ -54,11 +54,11 @@ class Ui_Setting(object):
         self.comboBox_2 = QtWidgets.QComboBox(self.verticalLayoutWidget)
         self.comboBox_2.setObjectName("comboBox_2")
         files = os.listdir('.\\')
-        xlfile = []
+        self.xlfile = []
         for i in files:
             if '.xlsx' in i:
-                xlfile.append(i)
-        for i in xlfile:
+                self.xlfile.append(i)
+        for i in self.xlfile:
             self.comboBox.addItem("")
         self.verticalLayout_2.addWidget(self.comboBox)
         self.verticalLayout_2.addWidget(self.comboBox_2)
@@ -74,27 +74,18 @@ class Ui_Setting(object):
         QtCore.QMetaObject.connectSlotsByName(Setting)
 
         self.comboBox.highlighted['int'].connect(self.sheet)
-        self.comboBox_2.highlighted['QString'].connect(self.c_sheet)
         self.StartButton.clicked.connect(self.get_setting_1)
         self.StartButton.clicked.connect(self.get_setting_2)
         self.StartButton.clicked.connect(self.get_setting_3)
         self.StartButton.clicked.connect(self.check_condition)
-    def sheet(self):
-        self.file['setting']['choose3'] = self.comboBox.currentText()
-        self.Answers_book = load_workbook(self.file['setting']['choose3'])
+    def sheet(self,text):
+        self.Answers_book = load_workbook(self.xlfile[text])
         s_names = self.Answers_book.sheetnames
         self.comboBox_2.clear()
         for i in s_names:
             self.comboBox_2.addItem(i)
-        self.file['setting']['c_sheet'] = self.comboBox_2.currentText()
-    def c_sheet(self,text):
-        self.file['setting']['c_sheet'] = text
+            print(f'{i}')
     def get_setting_1(self):
-        self.Answers_sheet = self.Answers_book[self.file['setting']['c_sheet']]
-        for self.rows in self.Answers_sheet['A']:
-            if self.rows.value == None:
-                break
-            print(self.rows)
         if self.radioButton_1.isChecked():
             self.i = 'c'
             choose = self.radioButton_1.text()
@@ -122,6 +113,8 @@ class Ui_Setting(object):
     def get_setting_3(self):
         # 获取NumberBox的文本内容
         self.text_num = self.NumberBox.text()
+        self.file['setting']['c_sheet'] = self.comboBox_2.currentText()
+        self.file['setting']['choose3'] = self.comboBox.currentText()
         self.file['setting']['num'] = self.text_num
         self.file['setting']['start_time'] = str(datetime.datetime.now())
         with open('save.ini', 'w') as configfile:
@@ -130,6 +123,10 @@ class Ui_Setting(object):
         print(self.text_num)
 
     def check_condition(self):
+        self.Answers_sheet = self.Answers_book[self.comboBox_2.currentText()]
+        for self.rows in self.Answers_sheet['A']:
+            if self.rows.value == None:
+                break
         if self.file['setting']['choose2'] == "重复题目":
             if self.i == 'c':
                 self.window.close()
@@ -150,15 +147,15 @@ class Ui_Setting(object):
         self.number.setText(_translate("Setting", "题目数量："))
         self.Repetitive.setText(_translate("Setting", "重复题目"))
         self.StartButton.setText(_translate("Setting", "开始答题"))
-        files = os.listdir('.\\')
-        xlfile = []
-        for i in files:
-            if '.xlsx' in i:
-                xlfile.append(i)
         a = 0
-        for i in xlfile:
+        for i in self.xlfile:
             self.comboBox.setItemText(a, _translate("Setting", i))
             a += 1
+        self.Answers_book = load_workbook(self.comboBox.currentText())
+        s_names = self.Answers_book.sheetnames
+        self.comboBox_2.clear()
+        for i in s_names:
+            self.comboBox_2.addItem(i)
         self.radioButton_1.setText(_translate("Setting", "正确的题无需解析（错误的题有解析）"))
         self.radioButton_2.setText(_translate("Setting", "做题过程有解析（做一题出一题的解析）"))
 
