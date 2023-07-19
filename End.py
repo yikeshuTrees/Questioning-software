@@ -119,7 +119,7 @@ class Ui_End(object):
               f"正确率：{self.rightlv}%")
         t = datetime.datetime.now()
         name = f'{t.year}年{t.month}月{t.day}日{t.hour}时{t.minute}分'
-        file = open(f'{name}.txt','a')
+        file = open(f'{name}.txt','a',encoding="utf-8")
         file.write(f"选择题库：{self.file['setting']['choose3']}\n"
                    f"页:{self.file['setting']['c_sheet']}\n"
               f"完成时间：\
@@ -134,7 +134,6 @@ class Ui_End(object):
             b = a[0]
             c = 0
             d = []
-            print(len(b))
             for i in b:
                 d.append(b[c].value)
                 c += 1

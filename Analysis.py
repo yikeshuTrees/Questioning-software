@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'Analysis.ui'
 #
@@ -19,14 +19,18 @@ class Ui_Analysis(object):
         self.Answers_sheet = self.Answers_book[self.file['setting']['c_sheet']]  #获取sheet页
         Analysis.setObjectName("Analysis")
         Analysis.resize(400, 300)
+        self.verticalLayout = QtWidgets.QVBoxLayout(Analysis)
+        self.verticalLayout.setObjectName("verticalLayout")
         self.Analysis_2 = QtWidgets.QLabel(Analysis)
-        self.Analysis_2.setGeometry(QtCore.QRect(20, 20, 361, 191))
+        self.Analysis_2.setMinimumSize(QtCore.QSize(361, 191))
         self.Analysis_2.setTextFormat(QtCore.Qt.AutoText)
         self.Analysis_2.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.Analysis_2.setObjectName("Analysis_2")
+        self.verticalLayout.addWidget(self.Analysis_2)
         self.pushButton = QtWidgets.QPushButton(Analysis)
-        self.pushButton.setGeometry(QtCore.QRect(160, 240, 75, 51))
+        self.pushButton.setMaximumSize(QtCore.QSize(75, 51))
         self.pushButton.setObjectName("pushButton")
+        self.verticalLayout.addWidget(self.pushButton)
 
         self.retranslateUi(Analysis)
         QtCore.QMetaObject.connectSlotsByName(Analysis)

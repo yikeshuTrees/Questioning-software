@@ -1,4 +1,4 @@
-﻿import datetime
+import datetime
 
 from PyQt5 import QtCore, QtWidgets
 import UI, random
@@ -35,35 +35,42 @@ class Ui_AnswerWindow(object):
             self.ran_list.append(self.ran)
         else:
             self.ran = random.randint(2, rows.row - 1)
-        AnswerWindow.setObjectName("AnswerWindow")  #设置窗口对象的名字
-        AnswerWindow.resize(400, 300)  #设置窗口大小
-        self.window = AnswerWindow  #保存窗口对象为self.window
-        self.verticalLayoutWidget = QtWidgets.QWidget(AnswerWindow)  #创建widget对象
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(19, 100, 361, 163))  #设置widget的位置和大小
-        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")  #设置widget对象的名字
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)  #创建垂直布局
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)  #设置布局的边距
-        self.verticalLayout.setObjectName("verticalLayout")  #设置布局对象的名字
-        self.radioButtonA = QtWidgets.QRadioButton(self.verticalLayoutWidget)  #创建单选按钮A
-        self.radioButtonA.setObjectName("radioButtonA")  #设置按钮对象的名字
-        self.verticalLayout.addWidget(self.radioButtonA)  #将按钮添加到布局中
-        self.radioButtonB = QtWidgets.QRadioButton(self.verticalLayoutWidget)  #创建单选按钮B
-        self.radioButtonB.setObjectName("radioButtonB")  #设置按钮对象的名字
-        self.verticalLayout.addWidget(self.radioButtonB)  #将按钮添加到布局中
-        self.radioButtonC = QtWidgets.QRadioButton(self.verticalLayoutWidget)  #创建单选按钮C
-        self.radioButtonC.setObjectName("radioButtonC")  #设置按钮对象的名字
-        self.verticalLayout.addWidget(self.radioButtonC)  #将按钮添加到布局中
-        self.radioButtonD = QtWidgets.QRadioButton(self.verticalLayoutWidget)  #创建单选按钮D
-        self.radioButtonD.setObjectName("radioButtonD")  #设置按钮对象的名字
-        self.verticalLayout.addWidget(self.radioButtonD)  #将按钮添加到布局中
-        self.NextButton = QtWidgets.QPushButton(AnswerWindow)  #创建按钮
-        self.NextButton.setGeometry(QtCore.QRect(300, 262, 75, 31))  #设置按钮的位置和大小
-        self.NextButton.setObjectName("NextButton")  #设置按钮对象的名字
-        self.label = QtWidgets.QLabel(AnswerWindow)  #创建标签
-        self.label.setGeometry(QtCore.QRect(20, 10, 361, 81))  #设置标签的位置和大小
-        self.label.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)  #设置标签的对齐方式
-        self.label.setWordWrap(True)  #设置标签的换行方式
-        self.label.setObjectName("label")  #设置标签对象的名字
+        AnswerWindow.setObjectName("AnswerWindow")  # 设置窗口对象的名字
+        AnswerWindow.resize(400, 300)  # 设置窗口大小
+        self.window = AnswerWindow  # 保存窗口对象为self.window
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(AnswerWindow)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.label = QtWidgets.QLabel(AnswerWindow)
+        self.label.setMinimumSize(QtCore.QSize(361, 81))
+        self.label.setMaximumSize(QtCore.QSize(361, 81))
+        self.label.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.label.setWordWrap(True)
+        self.label.setObjectName("label")
+        self.verticalLayout_2.addWidget(self.label)
+        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.radioButtonA = QtWidgets.QRadioButton(AnswerWindow)
+        self.radioButtonA.setMinimumSize(QtCore.QSize(359, 16))
+        self.radioButtonA.setObjectName("radioButtonA")
+        self.verticalLayout.addWidget(self.radioButtonA)
+        self.radioButtonB = QtWidgets.QRadioButton(AnswerWindow)
+        self.radioButtonB.setMinimumSize(QtCore.QSize(359, 16))
+        self.radioButtonB.setObjectName("radioButtonB")
+        self.verticalLayout.addWidget(self.radioButtonB)
+        self.radioButtonC = QtWidgets.QRadioButton(AnswerWindow)
+        self.radioButtonC.setMinimumSize(QtCore.QSize(359, 16))
+        self.radioButtonC.setObjectName("radioButtonC")
+        self.verticalLayout.addWidget(self.radioButtonC)
+        self.radioButtonD = QtWidgets.QRadioButton(AnswerWindow)
+        self.radioButtonD.setMinimumSize(QtCore.QSize(359, 16))
+        self.radioButtonD.setObjectName("radioButtonD")
+        self.verticalLayout.addWidget(self.radioButtonD)
+        self.verticalLayout_2.addLayout(self.verticalLayout)
+        self.NextButton = QtWidgets.QPushButton(AnswerWindow)
+        self.NextButton.setMinimumSize(QtCore.QSize(75, 31))
+        self.NextButton.setMaximumSize(QtCore.QSize(75, 31))
+        self.NextButton.setObjectName("NextButton")
+        self.verticalLayout_2.addWidget(self.NextButton)
 
         self.retranslateUi(AnswerWindow)  #调用翻译方法
         QtCore.QMetaObject.connectSlotsByName(AnswerWindow)  #连接槽函数和槽
