@@ -154,7 +154,7 @@ class Ui_q_analysis(object):
         self.question.setObjectName("question")
         self.verticalLayout_4.addWidget(self.question)
         self.scrollArea_3.setWidget(self.scrollAreaWidgetContents_4)
-        self.gridLayout.addWidget(self.scrollArea_3, 2, 0, 1, 1)
+        self.gridLayout.addWidget(self.scrollArea_3, 1, 0, 2, 1)
 
         self.retranslateUi(q_analysis)
         self.comboBox.highlighted['int'].connect(self.hightlight) # type: ignore
