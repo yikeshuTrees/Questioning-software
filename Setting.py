@@ -73,7 +73,7 @@ class Ui_Setting(object):
         self.retranslateUi(Setting)
         QtCore.QMetaObject.connectSlotsByName(Setting)
 
-        self.comboBox.highlighted['int'].connect(self.sheet)
+        self.comboBox.currentIndexChanged['int'].connect(self.sheet)
         self.StartButton.clicked.connect(self.get_setting_1)
         self.StartButton.clicked.connect(self.get_setting_2)
         self.StartButton.clicked.connect(self.get_setting_3)
