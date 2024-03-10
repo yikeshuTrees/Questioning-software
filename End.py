@@ -19,17 +19,6 @@ class Ui_End(object):
         self.file.read('save.ini')  # 读取配置文件
         self.Answers_book = load_workbook(self.file['setting']['choose3'])  #创建xw对象
         self.Answers_sheet = self.Answers_book[self.file['setting']['c_sheet']]  #获取sheet页
-        if self.file['end_analysis']['e_question'] == '':
-            self.a_list = self.file['end_analysis']['t_question'].split(',')
-            self.c_list = self.file['end_analysis']['t_choose'].split('<~!~>')
-        elif self.file['end_analysis']['t_question'] == '':
-            self.a_list = self.file['end_analysis']['e_question'].split(',')
-            self.c_list = self.file['end_analysis']['e_choose'].split('<~!~>')
-        else:
-            self.a_list = self.file['end_analysis']['e_question'].split(',') \
-                          + self.file['end_analysis']['t_question'].split(',')
-            self.c_list = self.file['end_analysis']['e_choose'].split('<~!~>') \
-                          + self.file['end_analysis']['t_choose'].split('<~!~>')
         End.setObjectName("End")
         End.resize(400, 300)
         self.verticalLayoutWidget = QtWidgets.QWidget(End)
@@ -71,15 +60,24 @@ class Ui_End(object):
         self.SButton = QtWidgets.QPushButton(End)
         self.SButton.setGeometry(QtCore.QRect(240, 160, 141, 41))
         self.SButton.setObjectName("SButton")
+        self.SaveBadButton = QtWidgets.QPushButton(End)
+        self.SaveBadButton.setGeometry(QtCore.QRect(240, 210, 61, 23))
+        self.SaveBadButton.setObjectName("SaveBadButton")
+        self.SaveRightButton = QtWidgets.QPushButton(End)
+        self.SaveRightButton.setGeometry(QtCore.QRect(310, 210, 71, 23))
+        self.SaveRightButton.setObjectName("SaveRightButton")
 
         self.retranslateUi(End)
         QtCore.QMetaObject.connectSlotsByName(End)
 
         self.EndButton.clicked.connect(End.close)
         self.SButton.clicked.connect(self.save)
+        self.SaveBadButton.clicked.connect(self.savebad)
+        self.SaveRightButton.clicked.connect(self.saveright)
         self.FButton.clicked.connect(self.Fchoose)
         self.TButton.clicked.connect(self.Tchoose)
         self.AButton.clicked.connect(self.Achoose)
+
 
     def Fchoose(self):
         self.file['End_analysis'] = {
@@ -110,6 +108,17 @@ class Ui_End(object):
             self.file.write(configfile)
         UI.q_analysisW()
     def save(self):
+        if self.file['end_analysis']['e_question'] == '':
+            a_list = self.file['end_analysis']['t_question'].split(',')
+            c_list = self.file['end_analysis']['t_choose'].split('<~!~>')
+        elif self.file['end_analysis']['t_question'] == '':
+            a_list = self.file['end_analysis']['e_question'].split(',')
+            c_list = self.file['end_analysis']['e_choose'].split('<~!~>')
+        else:
+            a_list = self.file['end_analysis']['e_question'].split(',') \
+                          + self.file['end_analysis']['t_question'].split(',')
+            c_list = self.file['end_analysis']['e_choose'].split('<~!~>') \
+                          + self.file['end_analysis']['t_choose'].split('<~!~>')
         print(f"选择题库：选择题库：{self.file['setting']['choose3']}"
               f"页:{self.file['setting']['c_sheet']}\n"
               f"完成时间：\n"
@@ -118,7 +127,7 @@ class Ui_End(object):
               f"总题目数量：{self.file['setting']['num']}\n"
               f"正确率：{self.rightlv}%")
         t = datetime.datetime.now()
-        name = f'{t.year}年{t.month}月{t.day}日{t.hour}时{t.minute}分'
+        name = f'{t.year}年{t.month}月{t.day}日{t.hour}时{t.minute}分{t.second}秒所有题'
         file = open(f'{name}.txt','a',encoding="utf-8")
         file.write(f"选择题库：{self.file['setting']['choose3']}\n"
                    f"页:{self.file['setting']['c_sheet']}\n"
@@ -129,18 +138,96 @@ class Ui_End(object):
               f"总题目数量：{self.file['setting']['num']}\n"
               f"正确率：{self.rightlv}%\n\n")
         e = 0
-        for i in self.a_list:
-            a = self.Answers_sheet[f'C{self.a_list[e]}:F{self.a_list[e]}']
+        for i in a_list:
+            a = self.Answers_sheet[f'C{a_list[e]}:F{a_list[e]}']
             b = a[0]
             c = 0
             d = []
             for i in b:
                 d.append(b[c].value)
                 c += 1
-            file.write(f"题目：{self.Answers_sheet[f'B{self.a_list[e]}'].value}\n"\
-                       f"正确选项：{d[0]}\n错误选项：{d[1], d[2], d[3]}\n你的选择：{self.c_list[e]}\n"\
-                       f"解析：{self.Answers_sheet[f'A{self.a_list[e]}'].value}\n\n")
+            file.write(f"题目：{self.Answers_sheet[f'B{a_list[e]}'].value}\n"\
+                       f"正确选项：{d[0]}\n错误选项：{d[1], d[2], d[3]}\n你的选择：{c_list[e]}\n"\
+                       f"解析：{self.Answers_sheet[f'A{a_list[e]}'].value}\n\n")
             e += 1
+
+    def savebad(self):
+            if self.file['end_analysis']['e_question'] == '':
+                UI.e_textW('你没有错题')
+                return
+            else:
+                a_list = self.file['end_analysis']['e_question'].split(',')
+                c_list = self.file['end_analysis']['e_choose'].split('<~!~>')
+            print(f"选择题库：选择题库：{self.file['setting']['choose3']}"
+                  f"页:{self.file['setting']['c_sheet']}\n"
+                  f"完成时间：\n"
+                  f"正确题目数量：{self.file['answers']['right']}\n"
+                  f"错误题目数量：{self.file['answers']['bad']}\n"
+                  f"总题目数量：{self.file['setting']['num']}\n"
+                  f"正确率：{self.rightlv}%")
+            t = datetime.datetime.now()
+            name = f'{t.year}年{t.month}月{t.day}日{t.hour}时{t.minute}分{t.second}秒分错题'
+            file = open(f'{name}.txt', 'a', encoding="utf-8")
+            file.write(f"选择题库：{self.file['setting']['choose3']}\n"
+                       f"页:{self.file['setting']['c_sheet']}\n"
+                       f"完成时间：\
+    {datetime.datetime.now() - datetime.datetime.strptime(self.file['setting']['start_time'], '%Y-%m-%d %H:%M:%S.%f')}\n"
+                       f"正确题目数量：{self.file['answers']['right']}\n"
+                       f"错误题目数量：{self.file['answers']['bad']}\n"
+                       f"总题目数量：{self.file['setting']['num']}\n"
+                       f"正确率：{self.rightlv}%\n\n")
+            e = 0
+            for i in a_list:
+                a = self.Answers_sheet[f'C{a_list[e]}:F{a_list[e]}']
+                b = a[0]
+                c = 0
+                d = []
+                for i in b:
+                    d.append(b[c].value)
+                    c += 1
+                file.write(f"题目：{self.Answers_sheet[f'B{a_list[e]}'].value}\n" \
+                           f"正确选项：{d[0]}\n错误选项：{d[1], d[2], d[3]}\n你的选择：{c_list[e]}\n" \
+                           f"解析：{self.Answers_sheet[f'A{a_list[e]}'].value}\n\n")
+                e += 1
+    def saveright(self):
+            if self.file['end_analysis']['t_question'] == '':
+                UI.e_textW('你没有对题')
+                return
+            else:
+                a_list = self.file['end_analysis']['t_question'].split(',')
+                c_list = self.file['end_analysis']['t_choose'].split('<~!~>')
+            print(f"选择题库：选择题库：{self.file['setting']['choose3']}"
+                  f"页:{self.file['setting']['c_sheet']}\n"
+                  f"完成时间：\n"
+                  f"正确题目数量：{self.file['answers']['right']}\n"
+                  f"错误题目数量：{self.file['answers']['bad']}\n"
+                  f"总题目数量：{self.file['setting']['num']}\n"
+                  f"正确率：{self.rightlv}%")
+            t = datetime.datetime.now()
+            name = f'{t.year}年{t.month}月{t.day}日{t.hour}时{t.minute}分{t.second}秒分对题'
+            file = open(f'{name}.txt', 'a', encoding="utf-8")
+            file.write(f"选择题库：{self.file['setting']['choose3']}\n"
+                       f"页:{self.file['setting']['c_sheet']}\n"
+                       f"完成时间：\
+    {datetime.datetime.now() - datetime.datetime.strptime(self.file['setting']['start_time'], '%Y-%m-%d %H:%M:%S.%f')}\n"
+                       f"正确题目数量：{self.file['answers']['right']}\n"
+                       f"错误题目数量：{self.file['answers']['bad']}\n"
+                       f"总题目数量：{self.file['setting']['num']}\n"
+                       f"正确率：{self.rightlv}%\n\n")
+            e = 0
+            for i in a_list:
+                a = self.Answers_sheet[f'C{a_list[e]}:F{a_list[e]}']
+                b = a[0]
+                c = 0
+                d = []
+                for i in b:
+                    d.append(b[c].value)
+                    c += 1
+                file.write(f"题目：{self.Answers_sheet[f'B{a_list[e]}'].value}\n" \
+                           f"正确选项：{d[0]}\n错误选项：{d[1], d[2], d[3]}\n你的选择：{c_list[e]}\n" \
+                           f"解析：{self.Answers_sheet[f'A{a_list[e]}'].value}\n\n")
+                e += 1
+
     def retranslateUi(self, End):
         _translate = QtCore.QCoreApplication.translate
         End.setWindowTitle(_translate("End", "结算"))
@@ -158,8 +245,9 @@ class Ui_End(object):
         self.AButton.setText(_translate("End", "查看所有解析"))
         self.TButton.setText(_translate("End", "查看所有对题解析"))
         self.EndButton.setText(_translate("End", "结束"))
-        self.SButton.setText(_translate("End", "保存数据"))
-
+        self.SButton.setText(_translate("End", "保存所有数据"))
+        self.SaveBadButton.setText(_translate("End", "保存错题"))
+        self.SaveRightButton.setText(_translate("End", "保存对题"))
 
 if __name__ == "__main__":
     import sys
