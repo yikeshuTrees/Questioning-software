@@ -97,25 +97,6 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <widget class="QComboBox" name="comboBox">
-      <item>
-       <property name="text">
-        <string>test1</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>test2</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>test3</string>
-       </property>
-      </item>
-     </widget>
-    </item>
-    <item>
      <widget class="QRadioButton" name="radioButton_1">
       <property name="text">
        <string>正确的题无需解析（错误的题有解析）</string>
@@ -129,6 +110,20 @@
       </property>
       <property name="autoExclusive">
        <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="checkBox_1">
+      <property name="text">
+       <string>做题过程告对错（做一题出一题的对错）</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="checkBox_2">
+      <property name="text">
+       <string>结算有解析</string>
       </property>
      </widget>
     </item>
