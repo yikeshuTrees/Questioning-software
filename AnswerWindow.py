@@ -2,39 +2,31 @@ import datetime
 
 from PyQt5 import QtCore, QtWidgets
 import UI, random
-import configparser as cfp
-from openpyxl import load_workbook
+import configparser as cfp # configparser 用于读取配置文件
+from openpyxl import load_workbook # 用于处理 Excel 文件
 
 # 导入模块和库
 
 class Ui_AnswerWindow(object):
     def setupUi(self, AnswerWindow):
         # 设置界面布局和控件属性
-        self.t_question = []
-        self.e_question = []
-        self.t_choose = []
-        self.e_choose = []
-        self.file = cfp.ConfigParser()
-        self.file.read('save.ini')  #读取配置文件
-        self.file['analysis'] = {}  #初始化配置文件
-        self.file['answers'] = {
-            'right':'0',
-            'bad':'0'
-        }
-        self.Answers_book = load_workbook(self.file['setting']['choose3'])  #创建xw对象
-        self.Answers_sheet = self.Answers_book[self.file['setting']['c_sheet']]  #获取sheet页
+        # 初始化一些变量和配置文件
+        self.t_question = []  # 正确答案列表
+        self.e_question = []  # 错误答案列表
+        self.t_choose = []  # 正确选择列表
+        self.e_choose = []  # 错误选择列表
+        self.file = cfp.ConfigParser()  # 创建配置文件解析器
+        self.file.read('save.ini')  # 读取配置文件
+        self.file['analysis'] = {}  # 初始化分析部分的配置
+        self.file['answers'] = {'right': '0', 'bad': '0'}  # 初始化正确和错误次数
+
+        # 加载 Excel 文件并获取工作表
+        self.Answers_book = load_workbook(self.file['setting']['choose3'])
+        self.Answers_sheet = self.Answers_book[self.file['setting']['c_sheet']]
         self.i = 0  #初始化变量
         self.right = 0  #初始化变量
         self.bad = 0  #初始化变量
         self.ran_list = []
-        for rows in self.Answers_sheet['A']:
-            if rows.value == None:
-                break
-        if self.file['setting']['choose2'] == 'None':
-            self.ran = random.randint(2, rows.row - 1)
-            self.ran_list.append(self.ran)
-        else:
-            self.ran = random.randint(2, rows.row - 1)
         AnswerWindow.setObjectName("AnswerWindow")  # 设置窗口对象的名字
         AnswerWindow.resize(400, 300)  # 设置窗口大小
         self.window = AnswerWindow  # 保存窗口对象为self.window
@@ -131,7 +123,8 @@ class Ui_AnswerWindow(object):
         QtCore.QMetaObject.connectSlotsByName(AnswerWindow)  #连接槽函数和槽
 
         self.NextButton.clicked.connect(self.get_choose_1)
-    def get_choose_1(self):
+    def get_choose_1(self): # 当点击“确定”按钮时，获取用户选择的答案并处理
+        # 获取用户选择的答案
         if self.radioButtonA.isChecked():
             answer = self.radioButtonA.text()
             print(f'checkA:{answer}')
@@ -148,6 +141,7 @@ class Ui_AnswerWindow(object):
             answer = 'error'
         if answer == 'error':
             UI.e_textW('请选择答案！！！')
+        # 根据用户选择的答案，更新正确或错误次数，保存到配置文件
         elif answer == self.t_answer:
             self.right += 1
             self.file['analysis']['analysis'] = str(self.ran)
@@ -158,8 +152,10 @@ class Ui_AnswerWindow(object):
             print(self.t_question,self.t_choose)
             with open('save.ini', 'w') as configfile:
                 self.file.write(configfile)
+            # 如果用户选择了正确答案，显示解析（如果配置允许）
             if self.file['setting']['choose1'] == '做题过程有解析（做一题出一题的解析）':
                 UI.AnalysisW()
+            # 更新界面，准备下一题
             self.i += 1
             self.check_condition()
         else:
@@ -172,13 +168,16 @@ class Ui_AnswerWindow(object):
             print(self.e_question,self.e_choose)
             with open('save.ini', 'w') as configfile:
                 self.file.write(configfile)
+            # 如果用户选择了错误答案，显示解析（如果配置允许）
             if (self.file['setting']['choose1'] == '做题过程有解析（做一题出一题的解析）') \
                     or (self.file['setting']['choose1'] == '正确的题无需解析（错误的题有解析）' \
                         and self.file['analysis']['judge'] == '答错了\n'):
                 UI.AnalysisW()
+            # 更新界面，准备下一题
             self.i += 1
             self.check_condition()
     def check_condition(self):
+        # 如果已经完成所有题目，保存最终分析结果并关闭窗口
         if self.i == int(self.file.get('setting', 'num')):
             self.file['end_analysis'] = {
                 't_question':','.join(str(item) for item in self.t_question),
@@ -190,62 +189,75 @@ class Ui_AnswerWindow(object):
             self.window.close()
             UI.EndW()
             self.Answers_book.close()
+        # 如果还有题目，继续加载下一题
         else:
             i = []
-            for rows in self.Answers_sheet['A']:
-                if rows.value == None:
-                    break
             if self.file['setting']['choose2'] == 'None':
-                self.ran = random.randint(2, rows.row - 1)
-                while self.ran in self.ran_list:
-                    self.ran = random.randint(2, rows.row - 1)
-                self.ran_list.append(self.ran)
+                self.ran = random.randint(2, len(self.r_list))
+                self.r_list.pop(self.ran-1)
             else:
-                self.ran = random.randint(2, rows.row - 1)
+                self.ran = random.randint(2, len(self.r_list))
             for b in self.Answers_sheet[f'A{self.ran}:F{self.ran}']:
                 AQA_list = b
             self.t_answer = AQA_list[2].value
-            a = random.randint(2, 5)
-            i.append(a)
-            self.radioButtonA.setText(AQA_list[a].value)
-            while a in i:
-                a = random.randint(2, 5)
-            i.append(a)
-            self.radioButtonB.setText(AQA_list[a].value)
-            while a in i:
-                a = random.randint(2, 5)
-            i.append(a)
-            self.radioButtonC.setText(AQA_list[a].value)
-            while a in i:
-                a = random.randint(2, 5)
-            i.append(a)
-            self.radioButtonD.setText(AQA_list[a].value)
+            r_list = [2, 3, 4, 5]
+            a = random.randint(0, 3)
+            self.radioButtonA.setText(AQA_list[r_list[a]].value)
+            r_list.pop(a)
+            a = random.randint(0, 2)
+            self.radioButtonB.setText(AQA_list[r_list[a]].value)
+            r_list.pop(a)
+            a = random.randint(0, 1)
+            self.radioButtonC.setText(AQA_list[r_list[a]].value)
+            r_list.pop(a)
+            self.radioButtonD.setText(AQA_list[r_list[0]].value)
             self.label.setText(AQA_list[1].value)
 
     def retranslateUi(self, AnswerWindow):
+        #遍历所选题库的sheet页的“A”列拥有的行数
+        for rows in self.Answers_sheet['A']:
+            if rows.value == None:
+                break
+        #定义r_list并将其元素数等同于题数
+        self.r_list = []
+        for f in range(rows.row-1):
+            self.r_list.append(f)
+        #随机选一题
+        if self.file['setting']['choose2'] == 'None':
+            #如果没勾选“重复题目”就将随机选到的题从r_list去除，以便之后判断
+            self.ran = random.randint(2, len(self.r_list))
+            self.r_list.pop(self.ran-1)
+        else:
+            #如果勾选就随便出
+            self.ran = random.randint(2, rows.row - 1)
+        # 设置标签（label）的文本自动换行，以便长文本能够正确显示。
         self.label.setWordWrap(True)
+        # 获取翻译函数，这个函数用于将字符串从程序的默认语言翻译成用户设置的语言。
         _translate = QtCore.QCoreApplication.translate
+        # 初始化一个空列表，用于存储从 Excel 文件中读取的问题和选项。
         i = []
+        # 初始化一个空列表，用于存储当前题目的答案选项。
         AQA_list = []
+        # 设置当前题目的随机行号，这个行号是从配置文件中读取的。
         self.file['analysis']['analysis'] = str(self.ran)
+        # 遍历 Excel 文件中指定行（从 A 列到 F 列）的数据，并将每一行的数据存储到 AQA_list 中。
         for b in self.Answers_sheet[f'A{self.ran}:F{self.ran}']:
             AQA_list = b
+        # 设置窗口标题为“答题中”，并使用翻译函数确保标题正确翻译。
         AnswerWindow.setWindowTitle(_translate("AnswerWindow", "答题中"))
+        # 获取当前题目的正确答案。
         self.t_answer = AQA_list[2].value
-        a = random.randint(2, 5)
-        i.append(a)
-        self.radioButtonA.setText(_translate("AnswerWindow", AQA_list[a].value))
-        while a in i:
-            a = random.randint(2, 5)
-        i.append(a)
-        self.radioButtonB.setText(_translate("AnswerWindow", AQA_list[a].value))
-        while a in i:
-            a = random.randint(2, 5)
-        i.append(a)
-        self.radioButtonC.setText(_translate("AnswerWindow", AQA_list[a].value))
-        while a in i:
-            a = random.randint(2, 5)
-        i.append(a)
-        self.radioButtonD.setText(_translate("AnswerWindow", AQA_list[a].value))
+        r_list = [2, 3, 4, 5]
+        a = random.randint(0, 3)
+        self.radioButtonA.setText(_translate("AnswerWindow", AQA_list[r_list[a]].value))
+        r_list.pop(a)
+        a = random.randint(0, 2)
+        self.radioButtonB.setText(_translate("AnswerWindow", AQA_list[r_list[a]].value))
+        r_list.pop(a)
+        a = random.randint(0, 1)
+        self.radioButtonC.setText(_translate("AnswerWindow", AQA_list[r_list[a]].value))
+        r_list.pop(a)
+        self.radioButtonD.setText(_translate("AnswerWindow", AQA_list[r_list[0]].value))
+
         self.NextButton.setText(_translate("AnswerWindow", "确定"))
         self.label.setText(_translate("AnswerWindow", AQA_list[1].value))
