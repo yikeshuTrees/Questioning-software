@@ -173,12 +173,13 @@ class Ui_End(object):
             e = 1
             d = []
             for i in a_list:
-                print(i)
+                #print(i)
                 for g in self.Answers_sheet[i]:
-                    print(g)
+                    #print(g)
                     d.append(g.value)
                 Answers_sheet.append(d)
                 d = []
+            Answers_sheet.append(['None'])
             Answers_book.save(f'{name}.xlsx')
 
 
@@ -192,13 +193,13 @@ class Ui_End(object):
                 return
         a_list = self.file['end_analysis']['e_question'].split(',')
         c_list = self.file['end_analysis']['e_choose'].split('<~!~>')
-        print(f"选择题库：选择题库：{self.file['setting']['choose3']}"
+        '''print(f"选择题库：选择题库：{self.file['setting']['choose3']}"
                   f"页:{self.file['setting']['c_sheet']}\n"
                   f"完成时间：\n"
                   f"正确题目数量：{self.file['answers']['right']}\n"
                   f"错误题目数量：{self.file['answers']['bad']}\n"
                   f"总题目数量：{self.file['setting']['num']}\n"
-                  f"正确率：{self.rightlv}%")
+                  f"正确率：{self.rightlv}%")'''
         t = datetime.datetime.now()
         name = f'{t.year}年{t.month}月{t.day}日{t.hour}时{t.minute}分{t.second}秒分错题'
         if self.radioButtonText.isChecked():
@@ -232,12 +233,13 @@ class Ui_End(object):
             e = 1
             d = []
             for i in a_list:
-                print(i)
+                #print(i)
                 for g in self.Answers_sheet[i]:
-                    print(g)
+                    #print(g)
                     d.append(g.value)
                 Answers_sheet.append(d)
                 d = []
+            Answers_sheet.append(['None'])
             Answers_book.save(f'{name}.xlsx')
 
     def saveright(self):
@@ -249,13 +251,13 @@ class Ui_End(object):
             return
         a_list = self.file['end_analysis']['t_question'].split(',')
         c_list = self.file['end_analysis']['t_choose'].split('<~!~>')
-        print(f"选择题库：选择题库：{self.file['setting']['choose3']}"
+        '''print(f"选择题库：选择题库：{self.file['setting']['choose3']}"
                   f"页:{self.file['setting']['c_sheet']}\n"
                   f"完成时间：\n"
                   f"正确题目数量：{self.file['answers']['right']}\n"
                   f"错误题目数量：{self.file['answers']['bad']}\n"
                   f"总题目数量：{self.file['setting']['num']}\n"
-                  f"正确率：{self.rightlv}%")
+                  f"正确率：{self.rightlv}%")'''
         t = datetime.datetime.now()
         name = f'{t.year}年{t.month}月{t.day}日{t.hour}时{t.minute}分{t.second}秒分对题'
         if self.radioButtonText.isChecked():
@@ -289,12 +291,13 @@ class Ui_End(object):
             e = 1
             d = []
             for i in a_list:
-                print(i)
+                #print(i)
                 for g in self.Answers_sheet[i]:
-                    print(g)
+                    #print(g)
                     d.append(g.value)
                 Answers_sheet.append(d)
                 d = []
+            Answers_sheet.append(['None'])
             Answers_book.save(f'{name}.xlsx')
 
     def retranslateUi(self, End):

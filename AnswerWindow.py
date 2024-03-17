@@ -127,16 +127,16 @@ class Ui_AnswerWindow(object):
         # 获取用户选择的答案
         if self.radioButtonA.isChecked():
             answer = self.radioButtonA.text()
-            print(f'checkA:{answer}')
+            #print(f'checkA:{answer}')
         elif self.radioButtonB.isChecked():
             answer = self.radioButtonB.text()
-            print(f'checkB:{answer}')
+            #print(f'checkB:{answer}')
         elif self.radioButtonC.isChecked():
             answer = self.radioButtonC.text()
-            print(f'checkC:{answer}')
+            #print(f'checkC:{answer}')
         elif self.radioButtonD.isChecked():
             answer = self.radioButtonD.text()
-            print(f'checkD:{answer}')
+            #print(f'checkD:{answer}')
         else:
             answer = 'error'
         if answer == 'error':
@@ -149,7 +149,7 @@ class Ui_AnswerWindow(object):
             self.file['answers']['right'] = str(self.right)
             self.t_question.append(self.ran)
             self.t_choose.append(answer)
-            print(self.t_question,self.t_choose)
+            #print(self.t_question,self.t_choose)
             with open('save.ini', 'w') as configfile:
                 self.file.write(configfile)
             # 如果用户选择了正确答案，显示解析（如果配置允许）
@@ -165,7 +165,7 @@ class Ui_AnswerWindow(object):
             self.file['answers']['bad'] = str(self.bad)
             self.e_question.append(self.ran)
             self.e_choose.append(answer)
-            print(self.e_question,self.e_choose)
+            #print(self.e_question,self.e_choose)
             with open('save.ini', 'w') as configfile:
                 self.file.write(configfile)
             # 如果用户选择了错误答案，显示解析（如果配置允许）
@@ -193,12 +193,13 @@ class Ui_AnswerWindow(object):
         else:
             i = []
             if self.file['setting']['choose2'] == 'None':
-                self.ran = random.randint(2, len(self.r_list))
-                self.r_list.pop(self.ran-1)
+                self.ran = random.choice(self.r_list) + 2
+                self.r_list.remove(self.ran-2)
             else:
                 self.ran = random.randint(2, len(self.r_list))
             for b in self.Answers_sheet[f'A{self.ran}:F{self.ran}']:
                 AQA_list = b
+            #print(self.r_list)
             self.t_answer = AQA_list[2].value
             r_list = [2, 3, 4, 5]
             a = random.randint(0, 3)
@@ -220,13 +221,14 @@ class Ui_AnswerWindow(object):
                 break
         #定义r_list并将其元素数等同于题数
         self.r_list = []
-        for f in range(rows.row-1):
+        for f in range(rows.row-2):
             self.r_list.append(f)
+        #print(self.r_list)
         #随机选一题
         if self.file['setting']['choose2'] == 'None':
             #如果没勾选“重复题目”就将随机选到的题从r_list去除，以便之后判断
-            self.ran = random.randint(2, len(self.r_list))
-            self.r_list.pop(self.ran-1)
+            self.ran = random.choice(self.r_list) + 2
+            self.r_list.remove(self.ran-2)
         else:
             #如果勾选就随便出
             self.ran = random.randint(2, rows.row - 1)

@@ -36,7 +36,7 @@ class Ui_q_analysis(object):
                               + self.file['end_analysis']['t_question'].split(',')
                 self.c_list = self.file['end_analysis']['e_choose'].split('<~!~>') \
                               + self.file['end_analysis']['t_choose'].split('<~!~>')
-        print(self.a_list,self.c_list)
+        #print(self.a_list,self.c_list)
         q_analysis.setObjectName("q_analysis")
         q_analysis.resize(578, 323)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
@@ -163,13 +163,13 @@ class Ui_q_analysis(object):
         self.pushButton.clicked.connect(q_analysis.close)
 
     def hightlight(self,text):
-        print(text,type(text))
+        #print(text,type(text))
         self.question.setText(f"题目：{self.Answers_sheet[f'B{self.a_list[text]}'].value}")
         a = self.Answers_sheet[f'C{self.a_list[text]}:F{self.a_list[text]}']
         b = a[0]
         c = 0
         d = []
-        print(len(b))
+        #print(len(b))
         for i in b:
             d.append(b[c].value)
             c += 1

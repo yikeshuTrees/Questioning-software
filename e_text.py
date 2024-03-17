@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_e_text(object):
     def __init__(self,text):
-        print(text)
+        #print(text)
         self.text = text
     def setupUi(self, e_text):
         e_text.setObjectName("e_text")

@@ -38,7 +38,7 @@ class Ui_Setting(object):
         self.NumberBox = QtWidgets.QSpinBox(Setting)
         self.NumberBox.setGeometry(QtCore.QRect(100, 210, 151, 21))
         self.NumberBox.setMinimum(1)
-        self.NumberBox.setMaximum(99999)
+        self.NumberBox.setMaximum(9999999)
         self.NumberBox.setObjectName("NumberBox")
         self.StartButton = QtWidgets.QPushButton(Setting)
         self.StartButton.setGeometry(QtCore.QRect(0, 260, 75, 41))
@@ -84,18 +84,18 @@ class Ui_Setting(object):
         self.comboBox_2.clear()
         for i in s_names:
             self.comboBox_2.addItem(i)
-            print(f'{i}')
+            #print(i)
     def get_setting_1(self):
         if self.radioButton_1.isChecked():
             self.i = 'c'
             choose = self.radioButton_1.text()
             self.file['setting']['choose1'] = choose
-            print(f'setting_1:{choose}')
+            #print(f'setting_1:{choose}')
         elif self.radioButton_2.isChecked():
             self.i = 'c'
             choose = self.radioButton_2.text()
             self.file['setting']['choose1'] = choose
-            print(f'setting_1:{choose}')
+            #print(f'setting_1:{choose}')
         else:
             self.i = 'n'
         with open('save.ini', 'w') as configfile:
@@ -120,11 +120,12 @@ class Ui_Setting(object):
         with open('save.ini', 'w') as configfile:
             self.file.write(configfile)
         # 打印文本内容
-        print(self.text_num)
+        #print(self.text_num)
 
     def check_condition(self):
         self.Answers_sheet = self.Answers_book[self.comboBox_2.currentText()]
         for self.rows in self.Answers_sheet['A']:
+            #print(self.rows)
             if self.rows.value == None:
                 break
         if self.file['setting']['choose2'] == "重复题目":
