@@ -123,6 +123,7 @@ class Ui_AnswerWindow(object):
         QtCore.QMetaObject.connectSlotsByName(AnswerWindow)  #连接槽函数和槽
 
         self.NextButton.clicked.connect(self.get_choose_1)
+        #print('UI放置成功')
     def get_choose_1(self): # 当点击“确定”按钮时，获取用户选择的答案并处理
         # 获取用户选择的答案
         if self.radioButtonA.isChecked():
@@ -179,6 +180,7 @@ class Ui_AnswerWindow(object):
     def check_condition(self):
         # 如果已经完成所有题目，保存最终分析结果并关闭窗口
         if self.i == int(self.file.get('setting', 'num')):
+            #print('题目已出完')
             self.file['end_analysis'] = {
                 't_question':','.join(str(item) for item in self.t_question),
                 'e_question':','.join(str(item) for item in self.e_question),
@@ -191,34 +193,39 @@ class Ui_AnswerWindow(object):
             self.Answers_book.close()
         # 如果还有题目，继续加载下一题
         else:
+            #print('题目未出完')
             i = []
             if self.file['setting']['choose2'] == 'None':
                 self.ran = random.choice(self.r_list) + 2
                 self.r_list.remove(self.ran-2)
+                #print(f'出现题成功\n剩余题数:{self.r_list}')
             else:
                 self.ran = random.randint(2, len(self.r_list))
             for b in self.Answers_sheet[f'A{self.ran}:F{self.ran}']:
                 AQA_list = b
+            #print("遍历A到F成功")
             #print(self.r_list)
-            self.t_answer = AQA_list[2].value
+            self.t_answer = str(AQA_list[2].value)
             r_list = [2, 3, 4, 5]
             a = random.randint(0, 3)
-            self.radioButtonA.setText(AQA_list[r_list[a]].value)
+            self.radioButtonA.setText(str(AQA_list[r_list[a]].value))
             r_list.pop(a)
             a = random.randint(0, 2)
-            self.radioButtonB.setText(AQA_list[r_list[a]].value)
+            self.radioButtonB.setText(str(AQA_list[r_list[a]].value))
             r_list.pop(a)
             a = random.randint(0, 1)
-            self.radioButtonC.setText(AQA_list[r_list[a]].value)
+            self.radioButtonC.setText(str(AQA_list[r_list[a]].value))
             r_list.pop(a)
-            self.radioButtonD.setText(AQA_list[r_list[0]].value)
-            self.label.setText(AQA_list[1].value)
+            self.radioButtonD.setText(str(AQA_list[r_list[0]].value))
+            self.label.setText(str(AQA_list[1].value))
+            #print('随机选项成功')
 
     def retranslateUi(self, AnswerWindow):
         #遍历所选题库的sheet页的“A”列拥有的行数
         for rows in self.Answers_sheet['A']:
             if rows.value == None:
                 break
+        #print(f'遍历题目成功\n{rows}')
         #定义r_list并将其元素数等同于题数
         self.r_list = []
         for f in range(rows.row-2):
@@ -232,6 +239,7 @@ class Ui_AnswerWindow(object):
         else:
             #如果勾选就随便出
             self.ran = random.randint(2, rows.row - 1)
+        #print('随机出题成功')
         # 设置标签（label）的文本自动换行，以便长文本能够正确显示。
         self.label.setWordWrap(True)
         # 获取翻译函数，这个函数用于将字符串从程序的默认语言翻译成用户设置的语言。
@@ -245,21 +253,24 @@ class Ui_AnswerWindow(object):
         # 遍历 Excel 文件中指定行（从 A 列到 F 列）的数据，并将每一行的数据存储到 AQA_list 中。
         for b in self.Answers_sheet[f'A{self.ran}:F{self.ran}']:
             AQA_list = b
+        #print('遍历A到F成功')
         # 设置窗口标题为“答题中”，并使用翻译函数确保标题正确翻译。
         AnswerWindow.setWindowTitle(_translate("AnswerWindow", "答题中"))
         # 获取当前题目的正确答案。
-        self.t_answer = AQA_list[2].value
+        self.t_answer = str(AQA_list[2].value)
         r_list = [2, 3, 4, 5]
         a = random.randint(0, 3)
-        self.radioButtonA.setText(_translate("AnswerWindow", AQA_list[r_list[a]].value))
+        self.radioButtonA.setText(_translate("AnswerWindow", str(AQA_list[r_list[a]].value)))
         r_list.pop(a)
         a = random.randint(0, 2)
-        self.radioButtonB.setText(_translate("AnswerWindow", AQA_list[r_list[a]].value))
+        self.radioButtonB.setText(_translate("AnswerWindow", str(AQA_list[r_list[a]].value)))
         r_list.pop(a)
         a = random.randint(0, 1)
-        self.radioButtonC.setText(_translate("AnswerWindow", AQA_list[r_list[a]].value))
+        self.radioButtonC.setText(_translate("AnswerWindow", str(AQA_list[r_list[a]].value)))
         r_list.pop(a)
-        self.radioButtonD.setText(_translate("AnswerWindow", AQA_list[r_list[0]].value))
+        self.radioButtonD.setText(_translate("AnswerWindow", str(AQA_list[r_list[0]].value)))
+        #print(f'随机选项成功')
 
         self.NextButton.setText(_translate("AnswerWindow", "确定"))
-        self.label.setText(_translate("AnswerWindow", AQA_list[1].value))
+        self.label.setText(_translate("AnswerWindow", str(AQA_list[1].value)))
+        #print('初始化成功')
