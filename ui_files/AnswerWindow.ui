@@ -41,28 +41,28 @@ p, li { white-space: pre-wrap; }
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QRadioButton" name="radioButtonA">
+     <widget class="QCheckBox" name="checkBoxA">
       <property name="text">
        <string>A.print('hello, world')</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QRadioButton" name="radioButtonB">
+     <widget class="QCheckBox" name="checkBoxB">
       <property name="text">
        <string>B.print(hello, world)</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QRadioButton" name="radioButtonC">
+     <widget class="QCheckBox" name="checkBoxC">
       <property name="text">
        <string>C.print('hellonworld')</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QRadioButton" name="radioButtonD">
+     <widget class="QCheckBox" name="checkBoxD">
       <property name="text">
        <string>D.print('helloworld)</string>
       </property>
