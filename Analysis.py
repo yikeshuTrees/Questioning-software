@@ -42,7 +42,7 @@ class Ui_Analysis(object):
     def retranslateUi(self, Analysis):
         self.Analysis_2.setWordWrap(True)
         _translate = QtCore.QCoreApplication.translate
-        ran = self.Answers_sheet[f'A{self.ran}']
+        ran = self.Answers_sheet[f'B{self.ran}']
         judge = self.file['analysis']['judge']
         Analysis.setWindowTitle(_translate("Analysis", "解析"))
         self.Analysis_2.setText(_translate("Analysis", f"{judge}\n解析：{ran.value}"))

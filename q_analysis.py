@@ -19,8 +19,8 @@ class Ui_q_analysis(object):
         self.Answers_book = load_workbook(self.file['setting']['choose3'])  #创建xw对象
         self.Answers_sheet = self.Answers_book[self.file['setting']['c_sheet']]  #获取sheet页
         if self.file['End_analysis']['choose'] == '错题解析':
-            self.a_list = self.file['end_analysis']['e_question'].split(',')
-            self.c_list = self.file['end_analysis']['e_choose'].split('<~!~>')
+            self.a_list = self.file['end_analysis']['e_question'].split(',') #a_list是问题的题目
+            self.c_list = self.file['end_analysis']['e_choose'].split('<~!~>') #c_list是问题的选择
         elif self.file['End_analysis']['choose'] == '对题解析':
             self.a_list = self.file['end_analysis']['t_question'].split(',')
             self.c_list = self.file['end_analysis']['t_choose'].split('<~!~>')
@@ -164,16 +164,19 @@ class Ui_q_analysis(object):
 
     def hightlight(self,text):
         #print(text,type(text))
-        self.question.setText(f"题目：{self.Answers_sheet[f'B{self.a_list[text]}'].value}")
         a = self.Answers_sheet[f'C{self.a_list[text]}:F{self.a_list[text]}']
-        b = a[0]
-        c = 0
-        d = []
-        #print(len(b))
-        for i in b:
-            d.append(b[c].value)
-            c += 1
-        self.choose.setText(f"正确选项：{d[0]}\n错误选项：{d[1],d[2],d[3]}\n你的选择：{self.c_list[text]}")
+        b = a[0]  # b是所有选项
+        d = []  #
+        # print(len(b))
+        d.append('A:'+b[0].value)
+        d.append('B:'+b[1].value)
+        d.append('C:'+b[2].value)
+        d.append('D:'+b[3].value)
+        d_text = f'{d[0]}\n{d[1]}\n{d[2]}\n{d[3]}'
+        self.question.setText(f"题目：{self.Answers_sheet[f'A{self.a_list[text]}'].value}\n{d_text}")
+        self.true_choice = self.Answers_sheet[f'G{self.a_list[text]}'].value
+
+        self.choose.setText(f"正确选项：{self.true_choice}\n你的选择：{self.c_list[text]}")
         self.analysis.setText(f"解析：{self.Answers_sheet[f'A{self.a_list[text]}'].value}")
     def retranslateUi(self, q_analysis):
         _translate = QtCore.QCoreApplication.translate

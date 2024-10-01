@@ -1,9 +1,13 @@
 import datetime
+from tkinter.commondialog import Dialog
 
 from PyQt5 import QtCore, QtWidgets
-import UI, random
+from PyQt5.QtWidgets import QDialog
+
+import UI, random, sys
 import configparser as cfp # configparser 用于读取配置文件
 from openpyxl import load_workbook # 用于处理 Excel 文件
+from collections import Counter
 
 # 导入模块和库
 
@@ -32,6 +36,9 @@ class Ui_AnswerWindow(object):
         self.window = AnswerWindow  # 保存窗口对象为self.window
         self.gridLayout = QtWidgets.QGridLayout(AnswerWindow)
         self.gridLayout.setObjectName("gridLayout")
+        self.textBrowser = QtWidgets.QTextBrowser(AnswerWindow)
+        self.textBrowser.setGeometry(QtCore.QRect(20, 10, 361, 81))
+        self.textBrowser.setObjectName("textBrowser")
         self.NextButton = QtWidgets.QPushButton(AnswerWindow)
         self.NextButton.setMinimumSize(QtCore.QSize(75, 31))
         self.NextButton.setMaximumSize(QtCore.QSize(75, 31))
@@ -52,42 +59,42 @@ class Ui_AnswerWindow(object):
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.radioButtonA = QtWidgets.QRadioButton(self.scrollAreaWidgetContents)
+        self.CheckBoxA = QtWidgets.QCheckBox(self.scrollAreaWidgetContents)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.radioButtonA.sizePolicy().hasHeightForWidth())
-        self.radioButtonA.setSizePolicy(sizePolicy)
-        self.radioButtonA.setMinimumSize(QtCore.QSize(0, 16))
-        self.radioButtonA.setObjectName("radioButtonA")
-        self.verticalLayout.addWidget(self.radioButtonA)
-        self.radioButtonB = QtWidgets.QRadioButton(self.scrollAreaWidgetContents)
+        sizePolicy.setHeightForWidth(self.CheckBoxA.sizePolicy().hasHeightForWidth())
+        self.CheckBoxA.setSizePolicy(sizePolicy)
+        self.CheckBoxA.setMinimumSize(QtCore.QSize(0, 16))
+        self.CheckBoxA.setObjectName("CheckBoxA")
+        self.verticalLayout.addWidget(self.CheckBoxA)
+        self.CheckBoxB = QtWidgets.QCheckBox(self.scrollAreaWidgetContents)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.radioButtonB.sizePolicy().hasHeightForWidth())
-        self.radioButtonB.setSizePolicy(sizePolicy)
-        self.radioButtonB.setMinimumSize(QtCore.QSize(0, 16))
-        self.radioButtonB.setObjectName("radioButtonB")
-        self.verticalLayout.addWidget(self.radioButtonB)
-        self.radioButtonC = QtWidgets.QRadioButton(self.scrollAreaWidgetContents)
+        sizePolicy.setHeightForWidth(self.CheckBoxB.sizePolicy().hasHeightForWidth())
+        self.CheckBoxB.setSizePolicy(sizePolicy)
+        self.CheckBoxB.setMinimumSize(QtCore.QSize(0, 16))
+        self.CheckBoxB.setObjectName("CheckBoxB")
+        self.verticalLayout.addWidget(self.CheckBoxB)
+        self.CheckBoxC = QtWidgets.QCheckBox(self.scrollAreaWidgetContents)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.radioButtonC.sizePolicy().hasHeightForWidth())
-        self.radioButtonC.setSizePolicy(sizePolicy)
-        self.radioButtonC.setMinimumSize(QtCore.QSize(0, 16))
-        self.radioButtonC.setObjectName("radioButtonC")
-        self.verticalLayout.addWidget(self.radioButtonC)
-        self.radioButtonD = QtWidgets.QRadioButton(self.scrollAreaWidgetContents)
+        sizePolicy.setHeightForWidth(self.CheckBoxC.sizePolicy().hasHeightForWidth())
+        self.CheckBoxC.setSizePolicy(sizePolicy)
+        self.CheckBoxC.setMinimumSize(QtCore.QSize(0, 16))
+        self.CheckBoxC.setObjectName("CheckBoxC")
+        self.verticalLayout.addWidget(self.CheckBoxC)
+        self.CheckBoxD = QtWidgets.QCheckBox(self.scrollAreaWidgetContents)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.radioButtonD.sizePolicy().hasHeightForWidth())
-        self.radioButtonD.setSizePolicy(sizePolicy)
-        self.radioButtonD.setMinimumSize(QtCore.QSize(0, 16))
-        self.radioButtonD.setObjectName("radioButtonD")
-        self.verticalLayout.addWidget(self.radioButtonD)
+        sizePolicy.setHeightForWidth(self.CheckBoxD.sizePolicy().hasHeightForWidth())
+        self.CheckBoxD.setSizePolicy(sizePolicy)
+        self.CheckBoxD.setMinimumSize(QtCore.QSize(0, 16))
+        self.CheckBoxD.setObjectName("CheckBoxD")
+        self.verticalLayout.addWidget(self.CheckBoxD)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.gridLayout.addWidget(self.scrollArea, 1, 0, 1, 2)
         self.scrollArea_2 = QtWidgets.QScrollArea(AnswerWindow)
@@ -126,24 +133,25 @@ class Ui_AnswerWindow(object):
         #print('UI放置成功')
     def get_choose_1(self): # 当点击“确定”按钮时，获取用户选择的答案并处理
         # 获取用户选择的答案
-        if self.radioButtonA.isChecked():
-            answer = self.radioButtonA.text()
+        answer = []
+        if self.CheckBoxA.isChecked():
+            answer.append('A')
             #print(f'checkA:{answer}')
-        elif self.radioButtonB.isChecked():
-            answer = self.radioButtonB.text()
+        if self.CheckBoxB.isChecked():
+            answer.append('B')
             #print(f'checkB:{answer}')
-        elif self.radioButtonC.isChecked():
-            answer = self.radioButtonC.text()
+        if self.CheckBoxC.isChecked():
+            answer.append('C')
             #print(f'checkC:{answer}')
-        elif self.radioButtonD.isChecked():
-            answer = self.radioButtonD.text()
+        if self.CheckBoxD.isChecked():
+            answer.append('D')
             #print(f'checkD:{answer}')
-        else:
-            answer = 'error'
-        if answer == 'error':
+        print(answer,self.t_answer)
+        if not(self.CheckBoxA.isChecked() or self.CheckBoxB.isChecked() or self.CheckBoxC.isChecked() or self.CheckBoxD.isChecked()):
             UI.e_textW('请选择答案！！！')
+            return 0
         # 根据用户选择的答案，更新正确或错误次数，保存到配置文件
-        elif answer == self.t_answer:
+        elif dict(Counter(answer)) == dict(Counter(self.t_answer)):
             self.right += 1
             self.file['analysis']['analysis'] = str(self.ran)
             self.file['analysis']['judge'] = '答对了\n'
@@ -196,28 +204,23 @@ class Ui_AnswerWindow(object):
             #print('题目未出完')
             i = []
             if self.file['setting']['choose2'] == 'None':
-                self.ran = random.choice(self.r_list) + 2
-                self.r_list.remove(self.ran-2)
-                #print(f'出现题成功\n剩余题数:{self.r_list}')
+                self.ran = random.choice(self.random_list) + 2
+                self.random_list.remove(self.ran-2)
+                #print(f'出现题成功\n剩余题数:{self.random_list}')
             else:
-                self.ran = random.randint(2, len(self.r_list))
-            for b in self.Answers_sheet[f'A{self.ran}:F{self.ran}']:
+                self.ran = random.randint(2, len(self.random_list))
+            for b in self.Answers_sheet[f'A{self.ran}:G{self.ran}']:
                 AQA_list = b
             #print("遍历A到F成功")
-            #print(self.r_list)
-            self.t_answer = str(AQA_list[2].value)
-            r_list = [2, 3, 4, 5]
-            a = random.randint(0, 3)
-            self.radioButtonA.setText(str(AQA_list[r_list[a]].value))
-            r_list.pop(a)
-            a = random.randint(0, 2)
-            self.radioButtonB.setText(str(AQA_list[r_list[a]].value))
-            r_list.pop(a)
-            a = random.randint(0, 1)
-            self.radioButtonC.setText(str(AQA_list[r_list[a]].value))
-            r_list.pop(a)
-            self.radioButtonD.setText(str(AQA_list[r_list[0]].value))
-            self.label.setText(str(AQA_list[1].value))
+            #print(self.random_list)
+            print(AQA_list)
+            print(AQA_list[6].value)
+            self.t_answer = str(AQA_list[6].value).split(',')
+            self.CheckBoxA.setText(str(AQA_list[2].value))
+            self.CheckBoxB.setText((AQA_list[3].value))
+            self.CheckBoxC.setText(str(AQA_list[4].value))
+            self.CheckBoxD.setText( str(AQA_list[5].value))
+            self.label.setText(str(AQA_list[0].value))
             #print('随机选项成功')
 
     def retranslateUi(self, AnswerWindow):
@@ -226,16 +229,16 @@ class Ui_AnswerWindow(object):
             if rows.value == None:
                 break
         #print(f'遍历题目成功\n{rows}')
-        #定义r_list并将其元素数等同于题数
-        self.r_list = []
+        #定义random_list并将其元素数等同于题数
+        self.random_list = []
         for f in range(rows.row-2):
-            self.r_list.append(f)
-        #print(self.r_list)
+            self.random_list.append(f)
+        #print(self.random_list)
         #随机选一题
         if self.file['setting']['choose2'] == 'None':
-            #如果没勾选“重复题目”就将随机选到的题从r_list去除，以便之后判断
-            self.ran = random.choice(self.r_list) + 2
-            self.r_list.remove(self.ran-2)
+            #如果没勾选“重复题目”就将随机选到的题从random_list去除，以便之后判断
+            self.ran = random.choice(self.random_list) + 2
+            self.random_list.remove(self.ran-2)
         else:
             #如果勾选就随便出
             self.ran = random.randint(2, rows.row - 1)
@@ -248,29 +251,38 @@ class Ui_AnswerWindow(object):
         i = []
         # 初始化一个空列表，用于存储当前题目的答案选项。
         AQA_list = []
-        # 设置当前题目的随机行号，这个行号是从配置文件中读取的。
+        # 设置当前题目的随机行号，这个行号会保存到配置文件中。
         self.file['analysis']['analysis'] = str(self.ran)
-        # 遍历 Excel 文件中指定行（从 A 列到 F 列）的数据，并将每一行的数据存储到 AQA_list 中。
-        for b in self.Answers_sheet[f'A{self.ran}:F{self.ran}']:
+        # 遍历 Excel 文件中指定行（从 A 列到 G 列）的数据，并将每一行的数据存储到 AQA_list 中。
+        for b in self.Answers_sheet[f'A{self.ran}:G{self.ran}']:
             AQA_list = b
-        #print('遍历A到F成功')
+        #print(f'遍历A到G成功，AQA_list:{AQA_list}')
         # 设置窗口标题为“答题中”，并使用翻译函数确保标题正确翻译。
         AnswerWindow.setWindowTitle(_translate("AnswerWindow", "答题中"))
+        self.textBrowser.setHtml(_translate("AnswerWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'SimSun\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">题目测试：要在控制台输出‘hello, world’下面哪个代码是正确的？( )</p></body></html>"))
+        self.CheckBoxA.setText(_translate("AnswerWindow", "A.print(\'hello, world\')"))
+        self.CheckBoxB.setText(_translate("AnswerWindow", "B.print(hello, world)"))
+        self.CheckBoxC.setText(_translate("AnswerWindow", "C.print(\'hellonworld\')"))
+        self.CheckBoxD.setText(_translate("AnswerWindow", "D.print(\'helloworld)"))
         # 获取当前题目的正确答案。
-        self.t_answer = str(AQA_list[2].value)
-        r_list = [2, 3, 4, 5]
-        a = random.randint(0, 3)
-        self.radioButtonA.setText(_translate("AnswerWindow", str(AQA_list[r_list[a]].value)))
-        r_list.pop(a)
-        a = random.randint(0, 2)
-        self.radioButtonB.setText(_translate("AnswerWindow", str(AQA_list[r_list[a]].value)))
-        r_list.pop(a)
-        a = random.randint(0, 1)
-        self.radioButtonC.setText(_translate("AnswerWindow", str(AQA_list[r_list[a]].value)))
-        r_list.pop(a)
-        self.radioButtonD.setText(_translate("AnswerWindow", str(AQA_list[r_list[0]].value)))
+        self.t_answer = str(AQA_list[6].value).split(',')
+        self.CheckBoxA.setText(_translate("AnswerWindow", str(AQA_list[2].value)))
+        self.CheckBoxB.setText(_translate("AnswerWindow", str(AQA_list[3].value)))
+        self.CheckBoxC.setText(_translate("AnswerWindow", str(AQA_list[4].value)))
+        self.CheckBoxD.setText(_translate("AnswerWindow", str(AQA_list[5].value)))
         #print(f'随机选项成功')
 
         self.NextButton.setText(_translate("AnswerWindow", "确定"))
-        self.label.setText(_translate("AnswerWindow", str(AQA_list[1].value)))
+        self.label.setText(_translate("AnswerWindow", str(AQA_list[0].value)))
         #print('初始化成功')
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    Main = QtWidgets.QWidget()
+    ui = Ui_AnswerWindow()
+    ui.setupUi(Main)
+    Main.show()
+    sys.exit(app.exec_())

@@ -154,21 +154,24 @@ class Ui_End(object):
                        f"正确率：{self.rightlv}%\n\n")
             e = 0
             for i in a_list:
-                a = self.Answers_sheet[f'C{a_list[e]}:F{a_list[e]}']
-                b = a[0]
-                c = 0
-                d = []
-                for i in b:
-                    d.append(b[c].value)
-                    c += 1
-                file.write(f"题目：{self.Answers_sheet[f'B{a_list[e]}'].value}\n" \
-                           f"正确选项：{d[0]}\n错误选项：{d[1], d[2], d[3]}\n你的选择：{c_list[e]}\n" \
-                           f"解析：{self.Answers_sheet[f'A{a_list[e]}'].value}\n\n")
+                a = self.Answers_sheet[f'C{a_list[e]}:G{a_list[e]}']
+                b = a[0]  # b是所有选项
+                d = []  #
+                # print(len(b))
+                d.append('A:' + b[0].value)
+                d.append('B:' + b[1].value)
+                d.append('C:' + b[2].value)
+                d.append('D:' + b[3].value)
+                d.append(b[4].value)
+                d_text = f'{d[0]}\n{d[1]}\n{d[2]}\n{d[3]}'
+                file.write(f"题目：{self.Answers_sheet[f'A{a_list[e]}'].value}\n{d_text}\n" \
+                           f"正确选项：{d[4]}\n你的选择：{c_list[e]}\n" \
+                           f"解析：{self.Answers_sheet[f'B{a_list[e]}'].value}\n\n")
                 e += 1
         if self.radioButtonXlsx.isChecked():
             Answers_book = openpyxl.Workbook()
             Answers_sheet = Answers_book.active
-            top = ['Analysis','Question','Tanswer','Eanswer','Eanswer','Eanswer']
+            top = ['题目','解析','选项A','选项B','选项C','选项C','正确答案']
             Answers_sheet.append(top)
             e = 1
             d = []
@@ -214,21 +217,24 @@ class Ui_End(object):
                        f"正确率：{self.rightlv}%\n\n")
             e = 0
             for i in a_list:
-                a = self.Answers_sheet[f'C{a_list[e]}:F{a_list[e]}']
-                b = a[0]
-                c = 0
-                d = []
-                for i in b:
-                    d.append(b[c].value)
-                    c += 1
-                file.write(f"题目：{self.Answers_sheet[f'B{a_list[e]}'].value}\n" \
-                           f"正确选项：{d[0]}\n错误选项：{d[1], d[2], d[3]}\n你的选择：{c_list[e]}\n" \
-                           f"解析：{self.Answers_sheet[f'A{a_list[e]}'].value}\n\n")
+                a = self.Answers_sheet[f'C{a_list[e]}:G{a_list[e]}']
+                b = a[0]  # b是所有选项
+                d = []  #
+                # print(len(b))
+                d.append('A:' + b[0].value)
+                d.append('B:' + b[1].value)
+                d.append('C:' + b[2].value)
+                d.append('D:' + b[3].value)
+                d.append(b[4].value)
+                d_text = f'{d[0]}\n{d[1]}\n{d[2]}\n{d[3]}'
+                file.write(f"题目：{self.Answers_sheet[f'A{a_list[e]}'].value}\n{d_text}" \
+                           f"正确选项：{d[4]}\n你的选择：{c_list[e]}\n" \
+                           f"解析：{self.Answers_sheet[f'B{a_list[e]}'].value}\n\n")
                 e += 1
         if self.radioButtonXlsx.isChecked():
             Answers_book = openpyxl.Workbook()
             Answers_sheet = Answers_book.active
-            top = ['Analysis','Question','Tanswer','Eanswer','Eanswer','Eanswer']
+            top = ['题目','解析','选项A','选项B','选项C','选项C','正确答案']
             Answers_sheet.append(top)
             e = 1
             d = []
@@ -272,21 +278,24 @@ class Ui_End(object):
                        f"正确率：{self.rightlv}%\n\n")
             e = 0
             for i in a_list:
-                a = self.Answers_sheet[f'C{a_list[e]}:F{a_list[e]}']
-                b = a[0]
-                c = 0
+                a = self.Answers_sheet[f'C{a_list[e]}:G{a_list[e]}']
+                b = a[0]  # b是所有选项
                 d = []
-                for i in b:
-                    d.append(b[c].value)
-                    c += 1
-                file.write(f"题目：{self.Answers_sheet[f'B{a_list[e]}'].value}\n" \
-                           f"正确选项：{d[0]}\n错误选项：{d[1], d[2], d[3]}\n你的选择：{c_list[e]}\n" \
-                           f"解析：{self.Answers_sheet[f'A{a_list[e]}'].value}\n\n")
+                #print(len(b))
+                d.append('A:' + b[0].value)
+                d.append('B:' + b[1].value)
+                d.append('C:' + b[2].value)
+                d.append('D:' + b[3].value)
+                d.append(b[4].value)
+                d_text = f'{d[0]}\n{d[1]}\n{d[2]}\n{d[3]}'
+                file.write(f"题目：{self.Answers_sheet[f'A{a_list[e]}'].value}\n{d_text}" \
+                           f"正确选项：{d[4]}\n你的选择：{c_list[e]}\n" \
+                           f"解析：{self.Answers_sheet[f'B{a_list[e]}'].value}\n\n")
                 e += 1
         if self.radioButtonXlsx.isChecked():
             Answers_book = openpyxl.Workbook()
             Answers_sheet = Answers_book.active
-            top = ['Analysis','Question','Tanswer','Eanswer','Eanswer','Eanswer']
+            top = ['题目','解析','选项A','选项B','选项C','选项C','正确答案']
             Answers_sheet.append(top)
             e = 1
             d = []
